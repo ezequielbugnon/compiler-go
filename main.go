@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	repl "leetcode/src/compiler-in-go/REPL"
+	"os"
+)
 
 func main() {
 	fmt.Println("compiler start")
+	repl.Repl(os.Stdin)
 }
