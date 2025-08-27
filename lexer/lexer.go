@@ -1,47 +1,44 @@
 package lexer
 
-const EQUAL = "="
-const PLUS = "+"
-const MINUS = "-"
-const LET = "LET"
-const EOF = "EOF"
-const IF = "IF"
-const ELSE = "ELSE"
-const LEFTBRACKET = "("
-const RIGHTBRACKET = ")"
+import "leetcode/src/compiler-in-go/token"
 
-type lexer struct {
-	Identifier string
-	Value      string
+type Lexer struct {
+	input        string
+	position     int
+	readPosition int
+	ch           byte
 }
 
-type lexerImp []lexer
-
-func New() *lexerImp {
-	return &lexerImp{}
-}
-
-func (l *lexerImp) Apply(lexer string) {
-
-	switch lexer {
-	case "=":
-		*l = append(*l, addLexer(EQUAL, "="))
-	case "+":
-		*l = append(*l, addLexer(PLUS, "+"))
-	case "-":
-		*l = append(*l, addLexer(MINUS, "-"))
-	case "(":
-		*l = append(*l, addLexer(LEFTBRACKET, "("))
-	case "":
-		*l = append(*l, addLexer(RIGHTBRACKET, ")"))
-	default:
-		*l = append(*l, addLexer(EOF, "EOF"))
+func New(input string) *Lexer {
+	l := &Lexer{
+		input: input,
 	}
+	l.ReadChar()
+	return l
 }
 
-func addLexer(identifier, value string) lexer {
-	return lexer{
-		Identifier: identifier,
-		Value:      value,
+func (l *Lexer) ReadChar() {
+	if l.readPosition >= len(l.input) {
+		l.ch = 0
+	} else {
+		l.ch = l.input[l.readPosition]
 	}
+
+	l.position = l.readPosition
+	l.readPosition += 1
+}
+
+func (l *Lexer) NextToken() token.Token {
+	var tok token.Token
+
+	switch l.ch {
+	case '=':
+		tok = newToken(token.ASSING, l.ch)
+	}
+
+	return tok
+}
+
+func newToken(tok string, value byte) token.Token {
+
 }
