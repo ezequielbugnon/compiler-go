@@ -5,16 +5,30 @@ import (
 	"fmt"
 	"io"
 	"leetcode/src/compiler-in-go/lexer"
+	"leetcode/src/compiler-in-go/token"
 )
+
+const PROMPT = ">> "
 
 func Repl(in io.Reader) {
 	scanner := bufio.NewScanner(in)
-	lexer := lexer.New()
 
-	if scanner.Scan() {
-		fmt.Println("working", scanner.Text())
-		lexer.Apply(scanner.Text())
+	for {
+		fmt.Printf(PROMPT)
+		scanned := scanner.Scan()
+
+		if !scanned {
+			return
+		}
+
+		line := scanner.Text()
+
+		l := lexer.New(line)
+
+		for tok := l.NextToken(); tok.Type != token.EOF; tok = l.NextToken() {
+			fmt.Printf("%+v\n", tok)
+		}
+
 	}
 
-	fmt.Println("lexer", lexer)
 }
