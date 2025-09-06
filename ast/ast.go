@@ -1,5 +1,7 @@
 package ast
 
+import "leetcode/src/compiler-in-go/token"
+
 type Node interface {
 	TokenLiteral() string
 }
@@ -24,4 +26,25 @@ func (p *Program) TokenLiteral() string {
 	} else {
 		return ""
 	}
+}
+
+type LetStatement struct {
+	Token *token.Token
+	Name  *Identiefier
+	Value Expression
+}
+
+func (ls *LetStatement) statementNode() {}
+func (ls *LetStatement) TokenLiteral() string {
+	return ls.Token.Literal
+}
+
+type Identiefier struct {
+	Token token.Token
+	Value string
+}
+
+func (i *Identiefier) expressionNode() {}
+func (i *Identiefier) TokenLiteral() string {
+	return i.Token.Literal
 }
